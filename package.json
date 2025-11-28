@@ -1,0 +1,14 @@
+{
+  "name": "tank-flow",
+  "version": "1.0.0",
+  "description": "TANK - Real-time Dark Pool & Institutional Flow Analysis",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "vercel dev"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}

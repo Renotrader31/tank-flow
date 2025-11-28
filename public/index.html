@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TANK Flow - Dark Pool & Institutional Activity</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #15151f;
+            --border-color: #2a2a3a;
+            --text-primary: #e8e8ec;
+            --text-secondary: #8888a0;
+            --text-muted: #555570;
+            --accent-cyan: #00d4ff;
+            --accent-magenta: #ff00aa;
+            --accent-green: #00ff88;
+            --accent-red: #ff4466;
+            --accent-yellow: #ffcc00;
+            --accent-orange: #ff8800;
+            --accent-purple: #8844ff;
+            --glow-cyan: rgba(0, 212, 255, 0.3);
+            --glow-green: rgba(0, 255, 136, 0.3);
+            --glow-red: rgba(255, 68, 102, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(90deg, rgba(255, 0, 170, 0.02) 1px, transparent 1px),
+                linear-gradient(rgba(255, 0, 170, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-red), var(--accent-green));
+            background-size: 200% 100%;
+            animation: tankPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes tankPulse {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-red));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 20px var(--glow-green);
+            animation: tankGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes tankGlow {
+            0% { box-shadow: 0 0 20px var(--glow-green); }
+            100% { box-shadow: 0 0 20px var(--glow-red); }
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .input-group label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-group input, .input-group select {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--glow-cyan);
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            color: var(--bg-primary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 16px;
+        }
+
+        .btn-scan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--glow-green);
+        }
+
+        .btn-scan:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-refresh {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            margin-top: 16px;
+            font-size: 16px;
+        }
+
+        .btn-refresh:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        /* Status */
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-dot.loading { background: var(--accent-yellow); }
+        .status-dot.error { background: var(--accent-red); animation: none; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title span { font-size: 18px; }
+
+        /* Tank Strength Meter */
+        .tank-meter {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .meter-gauge {
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-ring {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent-green) 0deg,
+                var(--accent-green) var(--buy-angle, 180deg),
+                var(--accent-red) var(--buy-angle, 180deg),
+                var(--accent-red) 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .gauge-ring::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: var(--bg-card);
+            border-radius: 50%;
+        }
+
+        .gauge-center {
+            position: absolute;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .gauge-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .gauge-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .meter-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-box.buy {
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .stat-box.sell {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.red { color: var(--accent-red); }
+
+        /* Flow Table */
+        .flow-table-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .flow-table th {
+            position: sticky;
+            top: 0;
+            background: var(--bg-tertiary);
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .flow-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .flow-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .flow-table tr.large-buy {
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .flow-table tr.large-sell {
+            background: rgba(255, 68, 102, 0.1);
+        }
+
+        .side-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .side-badge.buy {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .side-badge.sell {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .premium {
+            font-weight: 600;
+        }
+
+        .premium.large {
+            color: var(--accent-yellow);
+        }
+
+        /* Dark Pool Section */
+        .darkpool-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dp-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+        }
+
+        .dp-item.bullish {
+            border-left-color: var(--accent-green);
+        }
+
+        .dp-item.bearish {
+            border-left-color: var(--accent-red);
+        }
+
+        .dp-ticker {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .dp-details {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .dp-premium {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .dp-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Injection Log */
+        .injection-log {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .injection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .injection-item.buy {
+            border-left: 2px solid var(--accent-green);
+        }
+
+        .injection-item.sell {
+            border-left: 2px solid var(--accent-red);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        /* Live indicator */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 68, 102, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent-red);
+        }
+
+        .live-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            animation: livePulse 1s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">⛽</div>
+                <div class="logo-text">
+                    <h1>TANK Flow</h1>
+                    <p>Dark Pool & Institutional Activity Monitor</p>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="input-group">
+                    <label>Symbol (optional)</label>
+                    <input type="text" id="symbolInput" placeholder="All symbols" style="width: 120px;">
+                </div>
+                <div class="input-group">
+                    <label>Min Premium</label>
+                    <select id="minPremium" style="width: 120px;">
+                        <option value="100000">$100K+</option>
+                        <option value="250000">$250K+</option>
+                        <option value="500000" selected>$500K+</option>
+                        <option value="1000000">$1M+</option>
+                        <option value="5000000">$5M+</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Flow Type</label>
+                    <select id="flowType" style="width: 120px;">
+                        <option value="all">All Flow</option>
+                        <option value="darkpool">Dark Pool Only</option>
+                        <option value="sweeps">Sweeps Only</option>
+                        <option value="blocks">Blocks Only</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Expiration</label>
+                    <select id="expFilter" style="width: 120px;">
+                        <option value="all">All Expirations</option>
+                        <option value="0dte">0DTE Only</option>
+                        <option value="week">This Week (0-7)</option>
+                        <option value="month">This Month</option>
+                        <option value="30plus">30+ DTE</option>
+                    </select>
+                </div>
+                <button class="btn-scan" id="scanBtn" onclick="fetchFlow()">
+                    Scan Flow
+                </button>
+                <button class="btn-refresh" onclick="fetchFlow()" title="Refresh">🔄</button>
+            </div>
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Ready</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-grid">
+            <!-- Tank Strength Meter -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>⛽</span>
+                        Tank Strength
+                    </div>
+                    <div class="live-badge">
+                        <div class="dot"></div>
+                        LIVE
+                    </div>
+                </div>
+                <div class="tank-meter">
+                    <div class="meter-gauge">
+                        <div class="gauge-ring" id="gaugeRing">
+                            <div class="gauge-center">
+                                <div class="gauge-value" id="tankRatio">--</div>
+                                <div class="gauge-label">Buy/Sell</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="meter-stats">
+                        <div class="stat-box buy">
+                            <div class="stat-label">Buy Volume</div>
+                            <div class="stat-value green" id="buyVolume">--</div>
+                        </div>
+                        <div class="stat-box sell">
+                            <div class="stat-label">Sell Volume</div>
+                            <div class="stat-value red" id="sellVolume">--</div>
+                        </div>
+                        <div class="stat-box buy">
+                            <div class="stat-label">Buy Premium</div>
+                            <div class="stat-value green" id="buyPremium">--</div>
+                        </div>
+                        <div class="stat-box sell">
+                            <div class="stat-label">Sell Premium</div>
+                            <div class="stat-value red" id="sellPremium">--</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding-top: 12px;">
+                        <div class="stat-label">Net Flow</div>
+                        <div class="stat-value" id="netFlow" style="font-size: 24px;">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flow Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>📊</span>
+                        Live Options Flow
+                    </div>
+                    <span id="flowCount" style="font-size: 12px; color: var(--text-muted);">0 trades</span>
+                </div>
+                <div class="flow-table-container">
+                    <table class="flow-table" id="flowTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Ticker</th>
+                                <th>Strike</th>
+                                <th>Exp</th>
+                                <th>Type</th>
+                                <th>Side</th>
+                                <th>Premium</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flowBody">
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <div class="icon">📡</div>
+                                    <p>Click "Scan Flow" to load institutional activity</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Dark Pool Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>🌑</span>
+                            Dark Pool Prints
+                        </div>
+                    </div>
+                    <div class="darkpool-list" id="darkpoolList">
+                        <div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <p>Dark pool data will appear here</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-Min Injection Log -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>💉</span>
+                            2-Min Injection Log
+                        </div>
+                    </div>
+                    <div class="injection-log" id="injectionLog">
+                        <div class="empty-state">
+                            <div class="icon">⏱️</div>
+                            <p>Recent large injections</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let flowData = [];
+        let darkPoolData = [];
+        let injectionHistory = [];
+        let autoRefreshInterval = null;
+
+        // Fetch from our API proxy
+        async function fetchUW(endpoint, params = {}) {
+            const queryParams = new URLSearchParams({ endpoint, ...params });
+            const response = await fetch(`/api/uw?${queryParams.toString()}`);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'API request failed');
+            }
+            return response.json();
+        }
+
+        function setStatus(text, state = 'ready') {
+            document.getElementById('statusText').textContent = text;
+            const dot = document.getElementById('statusDot');
+            dot.className = 'status-dot';
+            if (state === 'loading') dot.classList.add('loading');
+            if (state === 'error') dot.classList.add('error');
+        }
+
+        async function fetchFlow() {
+            const symbol = document.getElementById('symbolInput').value.toUpperCase();
+            const minPremium = document.getElementById('minPremium').value;
+            const flowType = document.getElementById('flowType').value;
+            const expFilter = document.getElementById('expFilter').value;
+
+            setStatus('Fetching flow data...', 'loading');
+            document.getElementById('scanBtn').disabled = true;
+
+            try {
+                // Fetch flow alerts - use ticker-specific or general endpoint
+                let flowEndpoint = symbol 
+                    ? `/api/stock/${symbol}/flow-alerts`
+                    : '/api/option-trades/flow-alerts';
+                
+                const flowResponse = await fetchUW(flowEndpoint, {});
+                
+                if (flowResponse.data) {
+                    flowData = flowResponse.data.filter(f => {
+                        const premium = parseFloat(f.total_premium || f.premium || 0);
+                        return premium >= parseInt(minPremium);
+                    });
+                    
+                    // Filter by type if specified
+                    if (flowType === 'sweeps') {
+                        flowData = flowData.filter(f => f.has_sweep);
+                    } else if (flowType === 'blocks') {
+                        flowData = flowData.filter(f => f.has_floor);
+                    }
+                    
+                    // Filter by expiration
+                    if (expFilter !== 'all') {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        
+                        flowData = flowData.filter(f => {
+                            if (!f.expiry) return false;
+                            const expDate = new Date(f.expiry);
+                            expDate.setHours(0, 0, 0, 0);
+                            const daysToExp = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+                            
+                            switch(expFilter) {
+                                case '0dte':
+                                    return daysToExp === 0;
+                                case 'week':
+                                    return daysToExp >= 0 && daysToExp <= 7;
+                                case 'month':
+                                    return daysToExp >= 0 && daysToExp <= 30;
+                                case '30plus':
+                                    return daysToExp > 30;
+                                default:
+                                    return true;
+                            }
+                        });
+                    }
+                    
+                    renderFlowTable();
+                    calculateTankStrength();
+                }
+
+                // Fetch dark pool data
+                try {
+                    let dpEndpoint = symbol 
+                        ? `/api/darkpool/${symbol}`
+                        : '/api/darkpool/recent';
+                    
+                    const dpResponse = await fetchUW(dpEndpoint, {});
+                    if (dpResponse.data) {
+                        darkPoolData = dpResponse.data;
+                        renderDarkPool();
+                    }
+                } catch (dpError) {
+                    console.log('Dark pool fetch error:', dpError);
+                }
+
+                setStatus('Flow updated', 'ready');
+                updateInjectionLog();
+                
+            } catch (error) {
+                console.error('Error fetching flow:', error);
+                setStatus('Error: ' + error.message, 'error');
+            }
+
+            document.getElementById('scanBtn').disabled = false;
+        }
+
+        function renderFlowTable() {
+            const tbody = document.getElementById('flowBody');
+            
+            if (!flowData || flowData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <div class="icon">📭</div>
+                            <p>No flow matching your filters</p>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('flowCount').textContent = '0 trades';
+                return;
+            }
+
+            document.getElementById('flowCount').textContent = `${flowData.length} alerts`;
+
+            tbody.innerHTML = flowData.slice(0, 50).map(flow => {
+                const premium = parseFloat(flow.total_premium || 0);
+                // Determine sentiment from ask/bid premium
+                const askPrem = parseFloat(flow.total_ask_side_prem || 0);
+                const bidPrem = parseFloat(flow.total_bid_side_prem || 0);
+                const isBuy = askPrem > bidPrem;
+                const isLarge = premium >= 1000000;
+                const time = flow.created_at ? new Date(flow.created_at).toLocaleTimeString() : '--';
+                
+                return `
+                    <tr class="${isLarge ? (isBuy ? 'large-buy' : 'large-sell') : ''}">
+                        <td>${time}</td>
+                        <td><strong>${flow.ticker}</strong></td>
+                        <td>$${flow.strike}</td>
+                        <td>${formatExpiry(flow.expiry)}</td>
+                        <td>${flow.type?.toUpperCase() || '--'}</td>
+                        <td><span class="side-badge ${isBuy ? 'buy' : 'sell'}">${isBuy ? 'BUY' : 'SELL'}</span></td>
+                        <td class="premium ${isLarge ? 'large' : ''}">${formatMoney(premium)}</td>
+                        <td>${flow.total_size || flow.volume || '--'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function calculateTankStrength() {
+            let buyPremium = 0;
+            let sellPremium = 0;
+            let buyVolume = 0;
+            let sellVolume = 0;
+
+            flowData.forEach(flow => {
+                const askPrem = parseFloat(flow.total_ask_side_prem || 0);
+                const bidPrem = parseFloat(flow.total_bid_side_prem || 0);
+                const volume = parseInt(flow.total_size || flow.volume || 0);
+                
+                // Ask side = buying, Bid side = selling
+                buyPremium += askPrem;
+                sellPremium += bidPrem;
+                
+                // Approximate volume split
+                const totalPrem = askPrem + bidPrem;
+                if (totalPrem > 0) {
+                    buyVolume += Math.round(volume * (askPrem / totalPrem));
+                    sellVolume += Math.round(volume * (bidPrem / totalPrem));
+                }
+            });
+
+            const totalPremium = buyPremium + sellPremium;
+            const buyPercent = totalPremium > 0 ? (buyPremium / totalPremium) * 100 : 50;
+            const ratio = sellPremium > 0 ? (buyPremium / sellPremium).toFixed(2) : '∞';
+            const netFlow = buyPremium - sellPremium;
+
+            // Update gauge
+            const angle = (buyPercent / 100) * 360;
+            document.getElementById('gaugeRing').style.setProperty('--buy-angle', `${angle}deg`);
+            document.getElementById('tankRatio').textContent = ratio;
+            document.getElementById('tankRatio').style.color = netFlow >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+
+            // Update stats
+            document.getElementById('buyVolume').textContent = formatNumber(buyVolume);
+            document.getElementById('sellVolume').textContent = formatNumber(sellVolume);
+            document.getElementById('buyPremium').textContent = formatMoney(buyPremium);
+            document.getElementById('sellPremium').textContent = formatMoney(sellPremium);
+            
+            const netFlowEl = document.getElementById('netFlow');
+            netFlowEl.textContent = (netFlow >= 0 ? '+' : '') + formatMoney(netFlow);
+            netFlowEl.style.color = netFlow >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+        }
+
+        function renderDarkPool() {
+            const container = document.getElementById('darkpoolList');
+            
+            if (!darkPoolData || darkPoolData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🌑</div>
+                        <p>No dark pool data available</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = darkPoolData.slice(0, 20).map(dp => {
+                const price = parseFloat(dp.price) || 0;
+                const size = parseInt(dp.size) || 0;
+                const premium = parseFloat(dp.premium) || (price * size);
+                const nbboAsk = parseFloat(dp.nbbo_ask) || 0;
+                const nbboBid = parseFloat(dp.nbbo_bid) || 0;
+                const nbboMid = (nbboAsk + nbboBid) / 2;
+                const isBullish = price > nbboMid;
+                const time = dp.executed_at ? new Date(dp.executed_at).toLocaleTimeString() : '--';
+                
+                return `
+                    <div class="dp-item ${isBullish ? 'bullish' : 'bearish'}">
+                        <div>
+                            <div class="dp-ticker">${dp.ticker}</div>
+                            <div class="dp-details">${formatNumber(size)} @ $${price.toFixed(2)}</div>
+                        </div>
+                        <div class="dp-premium" style="color: ${isBullish ? 'var(--accent-green)' : 'var(--accent-red)'}">
+                            ${formatMoney(premium)}
+                        </div>
+                        <div class="dp-time">${time}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateInjectionLog() {
+            const container = document.getElementById('injectionLog');
+            
+            // Get large trades (already filtered by premium)
+            const recentLarge = flowData.filter(f => {
+                const premium = parseFloat(f.total_premium || 0);
+                return premium >= 500000;
+            }).slice(0, 10);
+
+            if (recentLarge.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⏱️</div>
+                        <p>No large injections ($500K+)</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recentLarge.map(flow => {
+                const premium = parseFloat(flow.total_premium || 0);
+                const askPrem = parseFloat(flow.total_ask_side_prem || 0);
+                const bidPrem = parseFloat(flow.total_bid_side_prem || 0);
+                const isBuy = askPrem > bidPrem;
+                const time = flow.created_at ? new Date(flow.created_at).toLocaleTimeString() : '--';
+                
+                return `
+                    <div class="injection-item ${isBuy ? 'buy' : 'sell'}">
+                        <div>
+                            <strong>${flow.ticker}</strong>
+                            <span style="color: var(--text-muted); margin-left: 8px;">$${flow.strike} ${flow.type?.toUpperCase()}</span>
+                        </div>
+                        <div style="color: ${isBuy ? 'var(--accent-green)' : 'var(--accent-red)'}">
+                            ${formatMoney(premium)}
+                        </div>
+                        <div style="color: var(--text-muted)">${time}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Helpers
+        function formatMoney(num) {
+            if (Math.abs(num) >= 1e9) return '$' + (num / 1e9).toFixed(1) + 'B';
+            if (Math.abs(num) >= 1e6) return '$' + (num / 1e6).toFixed(1) + 'M';
+            if (Math.abs(num) >= 1e3) return '$' + (num / 1e3).toFixed(0) + 'K';
+            return '$' + num.toFixed(0);
+        }
+
+        function formatNumber(num) {
+            if (Math.abs(num) >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+            if (Math.abs(num) >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function formatExpiry(exp) {
+            if (!exp) return '--';
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const expDate = new Date(exp);
+            expDate.setHours(0, 0, 0, 0);
+            const daysToExp = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+            
+            const dateStr = `${expDate.getMonth() + 1}/${expDate.getDate()}`;
+            
+            if (daysToExp === 0) return `${dateStr} (0DTE)`;
+            if (daysToExp === 1) return `${dateStr} (1DTE)`;
+            if (daysToExp <= 7) return `${dateStr} (${daysToExp}D)`;
+            return dateStr;
+        }
+
+        // Auto-refresh every 30 seconds
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(fetchFlow, 30000);
+        }
+
+        // Event listeners
+        document.getElementById('symbolInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchFlow();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // startAutoRefresh();
+        });
+    </script>
+</body>
+</html>
